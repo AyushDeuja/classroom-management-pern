@@ -63,3 +63,5 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: "GET subjects error" });
   }
 });
+
+export default router;
