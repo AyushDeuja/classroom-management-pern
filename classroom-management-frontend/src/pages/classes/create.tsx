@@ -4,10 +4,82 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useBack } from "@refinedev/core";
-import React from "react";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { classSchema } from "@/lib/schema";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { id } from "zod/v4/locales";
 
 const Create = () => {
   const back = useBack();
+
+  const form = useForm({
+    resolver: zodResolver(classSchema),
+    refineCoreProps: {
+      resource: "classes",
+      action: "create",
+    },
+  });
+
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+    control,
+  } = form;
+
+  const onSubmit = (values: z.infer<typeof classSchema>) => {
+    try {
+      console.log(values);
+    } catch (e) {
+      console.log("Error creating classes", e);
+    }
+  };
+
+  const teachers = [
+    {
+      id: 1,
+      name: "John Doe",
+    },
+    {
+      id: 2,
+      name: "Jane Doe",
+    },
+    {
+      id: 3,
+      name: "Bob Smith",
+    },
+  ];
+
+  const subjects = [
+    {
+      id: 1,
+      name: "Biology",
+      code: "BIO",
+    },
+    {
+      id: 2,
+      name: "Chemistry",
+      code: "CHEM",
+    },
+    {
+      id: 3,
+      name: "Physics",
+      code: "PHYS",
+    },
+  ];
+
   return (
     <CreateView className="class-view">
       <Breadcrumb />
@@ -25,7 +97,62 @@ const Create = () => {
             </CardTitle>
           </CardHeader>
           <Separator />
-          <CardContent className="mt-7"></CardContent>
+          <CardContent className="mt-7">
+            <Form {...form}>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                <div className="space-y-3">
+                  <Label>
+                    Banner Image <span className="text-orange-600">*</span>
+                  </Label>
+                  <p>Upload image widget here</p>
+                </div>
+                <FormField
+                  control={control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Class Name <span className="text-orange-600">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Introduction to Biology - Section A"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <FormField
+                    control={control}
+                    name="subjectId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Subject <span className="text-orange-600">*</span>
+                        </FormLabel>
+                        <Select
+                          onValueChange={(value) =>
+                            field.onChange(Number(value))
+                          }
+                          value={field?.value?.tosString()}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select a subject" />
+                            </SelectTrigger>
+                          </FormControl>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </form>
+            </Form>
+          </CardContent>
         </Card>
       </div>
     </CreateView>
