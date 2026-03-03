@@ -7,12 +7,9 @@ const UploadWidget = ({ value = null, onChange, disabled = false }) => {
   const widgetRef = useRef<CloudinaryWidget | null>(null);
   const onChangeRef = useRef(onChange);
   const [preview, setPreview] = useState<UploadWidgetValue | null>(value);
-  const [deleteToken, setDeleteToken] = useState<string | null>(null);
-  const [isRemoving, setIsRemoving] = useState<boolean>(false);
 
   useEffect(() => {
     setPreview(value);
-    if (!value) setDeleteToken(null);
   }, [value]);
 
   useEffect(() => {
@@ -39,7 +36,6 @@ const UploadWidget = ({ value = null, onChange, disabled = false }) => {
               publicId: result.info.public_id,
             };
             setPreview(payload);
-            setDeleteToken(result.info.delete_token ?? null);
             onChangeRef.current?.(payload);
           }
         },
@@ -64,11 +60,12 @@ const UploadWidget = ({ value = null, onChange, disabled = false }) => {
     }
   };
 
-  const removeFromCloudinary = async () => {};
   return (
     <div className="space-y-2">
       {preview ? (
-        <div className="upload-preivew"></div>
+        <div className="upload-preivew">
+          <img src={preview.url} alt="Uploaded File" />
+        </div>
       ) : (
         <div
           className="upload-dropzone"
