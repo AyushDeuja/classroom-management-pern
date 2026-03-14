@@ -4,7 +4,7 @@ if (!process.env.ARCJET_KEY && process.env.NODE_ENV !== "test") {
   throw new Error("ARCJET_KEY is not set in .env file");
 }
 
-const aj = arcjet({
+export const aj = arcjet({
   key: process.env.ARCJET_KEY!,
   rules: [
     // Shield protects your app from common attacks e.g. SQL injection
