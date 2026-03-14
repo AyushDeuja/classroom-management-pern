@@ -6,3 +6,14 @@ GET {{baseUrl}}/api/subjects
 ### Get Role by ID
 GET {{baseUrl}}/roles/4faa4ee1-a4bb-42e5-b728-ec0e8f720cd8
 
+### Create User
+POST {{baseUrl}}/api/auth/sign-up/email
+Content-Type: application/json
+
+{
+    "name": "Ayush",
+  "email": "ayush@teacher.com",
+  "password": "password",
+  "role": "teacher"
+}
+
