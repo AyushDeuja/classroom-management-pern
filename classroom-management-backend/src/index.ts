@@ -3,6 +3,8 @@ AgentAPI.config();
 
 import express from "express";
 import subjectsRouter from "./routes/subjects";
+import userRouter from "./routes/users";
+import classesRouter from "./routes/classes";
 import cors from "cors";
 import securityMiddleware from "./middleware/security";
 import { toNodeHandler } from "better-auth/node";
@@ -29,6 +31,8 @@ app.use(express.json());
 app.use(securityMiddleware);
 
 app.use("/api/subjects", subjectsRouter);
+app.use("/api/users", userRouter);
+app.use("/api/classes", classesRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello, welcome to classroom api!");
